@@ -7,6 +7,7 @@
     - [Blinking](#blinking)
     - [Voltage divider](#voltage-divider)
     - [Multitasking](#multitasking)
+    - [LCD Screen](#lcd-display)
 
 # Download
 
@@ -104,3 +105,35 @@ void loop() {                       // Loop function
 }
 ```
 
+## LCD Display
+
+***TASK*** --> For given LCD display provide code, that output 2 word/sentences on different lines of display. Find out how to define **LiquidCrystal_I2C** parameters.
+
+Code example
+```C
+
+#include <LiquidCrystal_I2C.h>        //import library neccessary for lcd-display
+
+LiquidCrystal_I2C lcd(0x3F,16, 2);    // set lcd addres of device for 16 characters and 2 lines
+
+void setup(){
+  lcd.init();                         // initialization
+  
+  lcd.clear();                        // clear LCD screen
+  lcd.backlight();                    // use background light to vivid display
+
+  lcd.setCursor(1,0);                 // set defalut position for first word/sentence
+  lcd.print("Cisco");                 // print word/sentence
+
+  lcd.setCursor(1,1);                 // set defalut position for second word/sentence
+  lcd.print("NTCIP");                 // print word/sentence
+}
+
+void loop(){                          // use it if you need continiously clearing and updating screen consistency
+  
+}
+```
+
+Usefull links:
+- [first](https://lastminuteengineers.com/i2c-lcd-arduino-tutorial/)
+- [second](https://forum.arduino.cc/t/lcd-liquid-crystal-variable/405208/2)

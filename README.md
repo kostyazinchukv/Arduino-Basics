@@ -8,6 +8,7 @@
     - [Voltage divider](#voltage-divider)
     - [Multitasking](#multitasking)
     - [LCD Screen](#lcd-display)
+    - [LED on breadboard](#led-on-breadboar)
 
 # Download
 
@@ -35,7 +36,7 @@ there will be lights on board meaning it is work. If it isn't ask team member to
 
 # Tasks
 
-In this section you will see tasks and little examples/solutions to them. Solutions might be one of possible, so you can try to solve them by yourself.
+In this section you will see tasks and little examples/solutions to them. Solutions might be one of possible, so you can try to solve them by yourself. All source code examples lie in **src** directory.
 
 ## Blinking
 
@@ -51,7 +52,7 @@ void loop(){
   delay(1000); // 1 second delay
 }
 ```
-
+---
 ## Voltage divider
 ***TASK*** --> Take a voltage value from ADT on Arduino board. As a scheme use voltage delimiter scheme example. All needed wires and resistors will be provide by team member.
 
@@ -67,7 +68,7 @@ void loop(){
 }
 
 ```
-
+---
 ## Multitasking
 ***TASK*** --> Make tasks [blinkig](#blinking) and [voltage divider](#voltage-divider) run simultaniously. 
 ```C
@@ -104,7 +105,7 @@ void loop() {                       // Loop function
   
 }
 ```
-
+---
 ## LCD Display
 
 ***TASK*** --> For given LCD display provide code, that output 2 word/sentences on different lines of display. Find out how to define **LiquidCrystal_I2C** parameters.
@@ -137,3 +138,36 @@ void loop(){                          // use it if you need continiously clearin
 Usefull links:
 - [first](https://lastminuteengineers.com/i2c-lcd-arduino-tutorial/)
 - [second](https://forum.arduino.cc/t/lcd-liquid-crystal-variable/405208/2)
+---
+
+## Led on breadboard
+
+***TASK*** --> Make LED blinking on a breadboard provide to you by team member. Make appropriate circuit for this task.
+
+Code example:
+```C
+const int led = 7;                                  // Pin on the Arduino Uno Board              
+const int one_second = 1000;                        // One second constant
+int previous_timescreen = millis();                 // previous time needed to determine passed time
+
+void setup() {
+  pinMode(led, OUTPUT);                             // pin mode to pin port on Arduino Uno board
+}
+
+void loop() {
+  int current_timescreen = millis();                                              
+  if((current_timescreen - previous_timescreen) > one_second - 1){                
+    digitalWrite(led, HIGH);                                                      
+    if((current_timescreen - previous_timescreen) > one_second + one_second - 1){
+      previous_timescreen = current_timescreen;
+    }
+  }
+  else{
+    digitalWrite(led, LOW);
+  }
+}
+```
+
+Usefull links:
+- [first](https://create.arduino.cc/projecthub/rowan07/make-a-simple-led-circuit-ce8308)
+- [second](https://www.instructables.com/Arduino-Blinking-LED/)

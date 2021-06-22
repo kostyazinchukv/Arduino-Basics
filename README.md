@@ -9,6 +9,7 @@
     - [Multitasking](#multitasking)
     - [LCD Screen](#lcd-display)
     - [LED on breadboard](#led-on-breadboar)
+    - [LED with button](#led-with-button)
 
 # Download
 
@@ -148,7 +149,26 @@ Code example:
 ```C
 const int led = 7;                                  // Pin on the Arduino Uno Board              
 const int one_second = 1000;                        // One second constant
+int previous_timescreen = millis();                 // previous time needed to determine passed timeconst int led = 7;                                  // Pin on the Arduino Uno Board              
+const int one_second = 1000;                        // One second constant
 int previous_timescreen = millis();                 // previous time needed to determine passed time
+
+void setup() {
+  pinMode(led, OUTPUT);                             // pin mode to pin port on Arduino Uno board
+}
+
+void loop() {
+  int current_timescreen = millis();                                              
+  if((current_timescreen - previous_timescreen) > one_second - 1){                
+    digitalWrite(led, HIGH);                                                      
+    if((current_timescreen - previous_timescreen) > one_second + one_second - 1){
+      previous_timescreen = current_timescreen;
+    }
+  }
+  else{
+    digitalWrite(led, LOW);
+  }
+}
 
 void setup() {
   pinMode(led, OUTPUT);                             // pin mode to pin port on Arduino Uno board
@@ -171,3 +191,99 @@ void loop() {
 Usefull links:
 - [first](https://create.arduino.cc/projecthub/rowan07/make-a-simple-led-circuit-ce8308)
 - [second](https://www.instructables.com/Arduino-Blinking-LED/)
+---
+
+## LED with button
+***TASK*** --> Make LED turn on\off using button on a breadboard. Complete this task without wires bouncing.
+
+Code example:
+```C
+const int buttonPin = 2;                            // the number of the pushbutton pin
+const int ledPin = 7;                               // the number of the LED pin
+
+
+int ledState = HIGH;                                // the current state of the output pin
+int buttonState;                                    // the current reading from the input pin
+int lastButtonState = LOW;                          // the previous reading from the input pin
+
+
+unsigned long lastDebounceTime = 0;                 // the last time the output pin was toggled
+unsigned long debounceDelay = 0;                    // the debounce time; increase if the output flickers
+
+void setup() {
+  pinMode(buttonPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+}
+
+void loop() {
+  int reading = digitalRead(buttonPin);
+
+  if (reading != lastButtonState) {
+    
+    lastDebounceTime = millis();                        // reset the debouncing timer
+  }
+
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+    if (reading != buttonState) {                       // if the button state has changed:
+      buttonState = reading;
+
+
+      if (buttonState == HIGH) {                        // only toggle the LED if the new button state is HIGH
+        ledState = !ledState;
+      }
+    }
+  }
+
+  digitalWrite(ledPin, ledState);
+
+  lastButtonState = reading;
+}
+```
+---
+
+# LED with Button and Interruption
+
+***TASK*** --> Make LED shine/not shine by button pressed. Implement it with interruption process.
+
+Code example:
+```C
+const int led_pin = 7;
+const int interrupt_pin = 2;
+
+int toggle_state;
+byte last_button_state = HIGH;
+unsigned long int last_pressed;
+volatile bool state;
+int debounce_delay = 20;
+
+void setup()
+{
+  pinMode(led_pin, OUTPUT);
+  pinMode(interrupt_pin, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(interrupt_pin), button_pressed, CHANGE);
+}
+
+void loop()
+{
+  if((millis() - last_pressed) > debounce_delay && state)
+  {
+      last_pressed = millis();
+      if(digitalRead(interrupt_pin) == LOW && last_button_state == HIGH)
+      {
+        toggle_state = !toggle_state;
+        digitalWrite(led_pin, toggle_state);
+        last_button_state = 0;
+      }
+      else if(digitalRead(interrupt_pin) == HIGH && last_button_state == LOW)
+      {
+        last_button_state = 1;  
+      }
+      state = false;
+  }
+}
+
+void button_pressed()
+{
+    state = ! state;
+}
+```
